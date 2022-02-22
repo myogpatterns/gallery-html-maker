@@ -4,6 +4,7 @@ imports/
 images/
 .DS_Store
 thumbs.db
+*.code-workspace
 
 # Created by https://www.toptal.com/developers/gitignore/api/python,virtualenv,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,virtualenv,visualstudiocode
