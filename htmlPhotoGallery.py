@@ -41,7 +41,7 @@ def htmlPhotoGallery(project, jpg_path, output):
             item = (
                 '\t' + '<article>'
                 '\n\t\t' + '<a href="' + gall_path + i + '" class="image">'
-                '\n\t\t' + '<img src="'+ thumb_path + i + '" title="" loading="lazy" />' + '</a>'
+                '\n\t\t' + '<img src="'+ thumb_path + i + '" title="Title" loading="lazy" />' + '</a>'
                 '\n\t' + '</article>'
             )
             line_list.append(item + '\n')
@@ -72,4 +72,4 @@ def imageDrop(f, jpg_path, gall_path, thumb_path):
 
 
 if __name__ == '__main__':
-    htmlPhotoGallery(project='alphaRaglan/', jpg_path='imports/', output='gallery.html')
+    htmlPhotoGallery(project='products/', jpg_path='imports/', output='gallery.html')
