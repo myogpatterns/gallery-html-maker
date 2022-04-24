@@ -5,7 +5,7 @@
 # <div class="gallery style1 small">
 #     <article>
 #         <a href="images/pulloverHoodie/1.JPG" class="image">
-#             <img src="images/pulloverHoodie/thumbs/1.JPG" title="" />
+#             <img src="images/pulloverHoodie/thumbs/1.JPG" title="" loading="lazy" />
 #         </a>
 #     </article>
 # </div>
@@ -23,7 +23,9 @@ from PIL import Image
 def htmlPhotoGallery(project, jpg_path, output):
 
     # site directories for images in gallery.html
-    gall_path = "images/" + project + "build/"
+    #gall_path = "images/" + project + "build/"
+    gall_path = "images/" + project
+
     thumb_path = gall_path + "thumbs/"
 
     paths = sorted(os.listdir(jpg_path))
@@ -31,7 +33,7 @@ def htmlPhotoGallery(project, jpg_path, output):
     #generate a list of inputs, then writelines(list)
     line_list = []
 
-    div = '<div class="gallery style1 small">'
+    div = '<section class="gallery style1 small">'
     line_list.append(div + '\n')
     
     for i in paths: 
@@ -41,13 +43,14 @@ def htmlPhotoGallery(project, jpg_path, output):
             item = (
                 '\t' + '<article>'
                 '\n\t\t' + '<a href="' + gall_path + i + '" class="image">'
-                '\n\t\t' + '<img src="'+ thumb_path + i + '" title="Title" loading="lazy" />' + '</a>'
+                '\n\t\t' + '<img src="'+ thumb_path + i + '"' + ' title="' + os.path.splitext(i)[0] + '"' + ' loading="lazy" />' + '</a>'
                 '\n\t' + '</article>'
             )
             line_list.append(item + '\n')
 
             imageDrop(i, jpg_path, gall_path, thumb_path)
-    
+    line_list.append('</section>')
+
     hf = open(output, 'w')
     hf.writelines(line_list)
     hf.close()
@@ -63,13 +66,17 @@ def imageDrop(f, jpg_path, gall_path, thumb_path):
         if not os.path.isdir(thumb_path):
             os.makedirs(thumb_path)
 
-        gal = image.copy().resize((1200,1200))
-        thumb = image.copy().resize((400,400))
+        galsize = (800,800)
+        gal = image.copy().resize(galsize)
+        thumbsize = (1200, 400)
+        thumb = image.copy()
+        #thumbnail respects aspect ratio for wide images
+        thumb.thumbnail(thumbsize)
 
-        gal.save(gall_path + f, "JPEG")
-        thumb.save(thumb_path + f, "JPEG")
+        gal.save(gall_path + f, "JPEG", quality="web_high")
+        thumb.save(thumb_path + f, "JPEG", quality="web_high")
 
 
 
 if __name__ == '__main__':
-    htmlPhotoGallery(project='products/', jpg_path='imports/', output='gallery.html')
+    htmlPhotoGallery(project='windshell2/', jpg_path='imports/', output='gallery.html')
