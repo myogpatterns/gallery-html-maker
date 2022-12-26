@@ -15,6 +15,7 @@
 #
 #   Place source jpgs into a jpg_path e.g. build
 #   Copy output folder which includes gallery.html and directories to place in website images folder /project/build
+#   Flip gall_path for build photos
 #
 
 import os
@@ -23,8 +24,8 @@ from PIL import Image
 def htmlPhotoGallery(project, jpg_path, output):
 
     # site directories for images in gallery.html
-    #gall_path = "images/" + project + "build/"
-    gall_path = "images/" + project
+    gall_path = "images/" + project + "build/"
+    #gall_path = "images/" + project
 
     thumb_path = gall_path + "thumbs/"
 
@@ -33,7 +34,7 @@ def htmlPhotoGallery(project, jpg_path, output):
     #generate a list of inputs, then writelines(list)
     line_list = []
 
-    div = '<section class="gallery style1 small">'
+    div = '<div id = "build_gallery" style="display:none;" class="gallery style1 small">'
     line_list.append(div + '\n')
     
     for i in paths: 
@@ -43,13 +44,13 @@ def htmlPhotoGallery(project, jpg_path, output):
             item = (
                 '\t' + '<article>'
                 '\n\t\t' + '<a href="' + gall_path + i + '" class="image">'
-                '\n\t\t' + '<img src="'+ thumb_path + i + '"' + ' title="' + os.path.splitext(i)[0] + '"' + ' loading="lazy" />' + '</a>'
+                '\n\t\t' + '<img src="'+ thumb_path + i + '"' + ' title="Step ' + os.path.splitext(i)[0] + '"' + ' loading="lazy" />' + '</a>'
                 '\n\t' + '</article>'
             )
             line_list.append(item + '\n')
 
             imageDrop(i, jpg_path, gall_path, thumb_path)
-    line_list.append('</section>')
+    line_list.append('</div>')
 
     hf = open(output, 'w')
     hf.writelines(line_list)
@@ -66,8 +67,11 @@ def imageDrop(f, jpg_path, gall_path, thumb_path):
         if not os.path.isdir(thumb_path):
             os.makedirs(thumb_path)
 
-        galsize = (800,800)
-        gal = image.copy().resize(galsize)
+        galsize = (800,2400)
+        #gal = image.copy().resize(galsize)
+        gal = image.copy()
+        #thumbnail respects aspect ratio
+        gal.thumbnail(galsize)
         thumbsize = (1200, 400)
         thumb = image.copy()
         #thumbnail respects aspect ratio for wide images
@@ -79,4 +83,4 @@ def imageDrop(f, jpg_path, gall_path, thumb_path):
 
 
 if __name__ == '__main__':
-    htmlPhotoGallery(project='windshell2/', jpg_path='imports/', output='gallery.html')
+    htmlPhotoGallery(project='chonkysling/', jpg_path='imports/', output='gallery.html')
