@@ -19,13 +19,13 @@
 #
 
 import os
-from PIL import Image
+from PIL import Image, ImageOps
 
 def htmlPhotoGallery(project, jpg_path, output):
 
     # site directories for images in gallery.html
-    gall_path = "images/" + project + "build/"
-    #gall_path = "images/" + project
+    #gall_path = "images/" + project + "build/"
+    gall_path = "images/" + project
 
     thumb_path = gall_path + "thumbs/"
 
@@ -66,14 +66,14 @@ def imageDrop(f, jpg_path, gall_path, thumb_path):
             os.makedirs(gall_path)
         if not os.path.isdir(thumb_path):
             os.makedirs(thumb_path)
-
+        fixed_image = ImageOps.exif_transpose(image)
         galsize = (800,2400)
         #gal = image.copy().resize(galsize)
-        gal = image.copy()
+        gal = fixed_image.copy()
         #thumbnail respects aspect ratio
         gal.thumbnail(galsize)
-        thumbsize = (1200, 400)
-        thumb = image.copy()
+        thumbsize = (400,1200)
+        thumb = fixed_image.copy()
         #thumbnail respects aspect ratio for wide images
         thumb.thumbnail(thumbsize)
 
@@ -83,4 +83,4 @@ def imageDrop(f, jpg_path, gall_path, thumb_path):
 
 
 if __name__ == '__main__':
-    htmlPhotoGallery(project='chonkysling/', jpg_path='imports/', output='gallery.html')
+    htmlPhotoGallery(project='techPouch/', jpg_path='imports/', output='gallery.html')
